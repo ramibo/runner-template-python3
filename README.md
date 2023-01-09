@@ -69,7 +69,9 @@ def simple_action(a: str):
     return f"hi {a} from simple_action"
 ```
 
-#### We encourage you to use pydantic models for type annotation. Doing so will stregthen input validation. It will also enhance the functionality of Kubiyas no-code interface.
+#### We encourage you to use pydantic models for type annotation. 
+#### Doing so will stregthen input validation. 
+#### It will also enhance the functionality of Kubiyas no-code interface.
 
 ```python
 lass ExampleModel(BaseModel):
