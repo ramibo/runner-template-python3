@@ -40,7 +40,11 @@ faas-cli new --lang runner-template-python3 $FN
 Build, push, and deploy
 
 ```
-faas-cli up -f $FN.yml
+faas-cli publish -f $FN.yml
+```
+
+```
+faas-cli deploy -f $FN.yml
 ```
 
 Test the new function
@@ -49,25 +53,8 @@ Test the new function
 echo -n content | faas-cli invoke $FN
 ```
 
-## Event and Context Data
 
-The function handler is passed two arguments, *event* and *context*.
 
-*event* contains data about the request, including:
-- body
-- headers
-- method
-- query
-- path
-
-*context* contains basic information about the function, including:
-- hostname
-
-## Response Bodies
-
-By default, the template will automatically attempt to set the correct Content-Type header for you based on the type of response.
-
-For example, returning a dict object type will automatically attach the header `Content-Type: application/json` and returning a string type will automatically attach the `Content-Type: text/html, charset=utf-8` for you.
 
 ## Example usage
 
@@ -82,9 +69,8 @@ def simple_action(a: str):
     return f"hi {a} from simple_action"
 ```
 
-### We encourage you to use pydantic models for type annotation. Doing so will stregthen input validation. It will also enhance the functionality of Kubiyas no-code interface.
+#### We encourage you to use pydantic models for type annotation. Doing so will stregthen input validation. It will also enhance the functionality of Kubiyas no-code interface.
 
-Successful response status code and JSON response body
 ```python
 lass ExampleModel(BaseModel):
     """used for type hints, automatic decumentation and validation"""
