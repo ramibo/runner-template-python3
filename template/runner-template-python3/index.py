@@ -2,20 +2,23 @@
 from flask import Flask, request, jsonify
 from waitress import serve
 import os
+import json
 
 import kubiya
 from kubiya.action_store import ActionStore
 from kubiya.loader import get_single_action_store
 
+
 from typing import Optional, Dict, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, Json, ValidationError
 import traceback
 
 from function import main_store
 
+
 class Request(BaseModel):
     action: Optional[str]
-    input: Optional[Any]
+    input:  Json[Any]
     secrets: Optional[Dict]
     action_store: Optional[str]
     inbox_id: Optional[str]
@@ -36,11 +39,7 @@ def execute_handler(request: Request, action_store: ActionStore) -> Any:
             }
 
         if request.secrets:
-            for secret, secret_value in request.secrets.items():
-                print("Setting secret: ", secret)
-                os.environ[secret] = secret_value
-        else:
-            print("No secrets defined")
+            setattr(action_store, "secrets", request.secrets)
         return action_store.execute_action(request.action, request.input)
     except Exception as e:
         return {
