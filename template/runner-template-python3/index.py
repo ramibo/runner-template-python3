@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+VERSION = "1.0.0"
+RUNTIME = f"python3-k-runner-{VERSION}"
 from flask import Flask, request, jsonify
 from waitress import serve
 import os
@@ -9,7 +11,7 @@ from kubiya.action_store import ActionStore
 from kubiya.loader import get_single_action_store
 
 
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Union
 from pydantic import BaseModel, Json, ValidationError
 import traceback
 
@@ -18,7 +20,7 @@ from function import main_store
 
 class Request(BaseModel):
     action: Optional[str]
-    input:  Json[Any]
+    input:  Optional[Any]
     secrets: Optional[Dict]
     action_store: Optional[str]
     inbox_id: Optional[str]
@@ -30,6 +32,7 @@ def execute_handler(request: Request, action_store: ActionStore) -> Any:
     try:
         if request.action == '__KUBIYA_DISCOVER__':
             return {
+                "faas_runtime": RUNTIME,
                 "name": action_store.get_name(),
                 "version": action_store.get_version(),
                 "registered_actions": action_store.get_registered_actions(),
@@ -40,7 +43,8 @@ def execute_handler(request: Request, action_store: ActionStore) -> Any:
 
         if request.secrets:
             setattr(action_store, "secrets", request.secrets)
-        return action_store.execute_action(request.action, request.input)
+        result = action_store.execute_action(request.action, request.input)
+        return {"result": result, "faas_runtime": RUNTIME}
     except Exception as e:
         return {
             "error": str(e),
