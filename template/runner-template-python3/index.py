@@ -47,8 +47,10 @@ def execute_handler(request: Request, action_store: ActionStore) -> Any:
         return {"result": result, "faas_runtime": RUNTIME}
     except Exception as e:
         return {
-            "error": str(e),
-            "stacktrace": traceback.format_exc(),
+            "error": { 
+                "error_message": str(e),
+                "stacktrace": traceback.format_exc(),
+            }
         }
 
 app = Flask(__name__)
