@@ -7,7 +7,9 @@ import kubiya
 # This is the action store object
 # It is used to define the action store name and version
 # It will get passed to the Kubiya platform and used to identify the action store
-action_store = kubiya.ActionStore("terraform", "0")
+
+# Do not forget to change the action store name according to the name you'll use to bundle it
+action_store = kubiya.ActionStore("sample-action-store", "0.1.0")
 
 # This is a simple action that returns a string
 # It is not validated, so you can pass anything as an input
