@@ -8,7 +8,7 @@ ARG ADDITIONAL_PACKAGE
 # Alternatively use ADD https:// (which will not be cached by Docker builder)
 
 RUN apt-get -qy update \
-    && apt-get -qy install gcc make ${ADDITIONAL_PACKAGE} \
+    && apt-get -qy install gcc git make ${ADDITIONAL_PACKAGE} \
     && rm -rf /var/lib/apt/lists/*
 
 # Add non root user
