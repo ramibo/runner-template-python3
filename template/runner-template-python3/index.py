@@ -31,6 +31,8 @@ class Request(BaseModel):
 def execute_handler(request: Request, action_store: ActionStore) -> Any:
     try:
         if request.action == '__KUBIYA_DISCOVER__':
+            icon_url = getattr(action_store, "icon_url", None)
+
             return {
                 "faas_runtime": RUNTIME,
                 "name": action_store.get_name(),
@@ -39,6 +41,8 @@ def execute_handler(request: Request, action_store: ActionStore) -> Any:
                 "secrets": action_store.get_registered_secrets(),
                 "kubiya_version": "python-sdk: " + kubiya.__version__,
                 "actions_metadata": action_store._action_metadata,
+                "icon_url": icon_url,
+                
             }
 
         if request.secrets:
