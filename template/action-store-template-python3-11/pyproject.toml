@@ -7,9 +7,9 @@ maintainers = ["Eric Lopes <nullhack@users.noreply.github.com>"]
 license = "MIT"
 repository = "https://github.com/nullhack/openfaas-fastapi-template"
 documentation = "https://github.com/nullhack/openfaas-fastapi-template/tree/main/docs/api/"
-packages = [
-    { include = "handler" },
-]
+# packages = [
+#     { include = "handler" },
+# ]
 
 [tool.poetry.dependencies]
 python = "^3.10"

@@ -8,14 +8,11 @@ import kubiya
 from kubiya.action_store import ActionStore
 from kubiya.loader import get_single_action_store
 
-from .action_store import main_store
-from .server import model
+from . import model
 
 
 VERSION = "1.0.0"
 RUNTIME = f"python3-k-runner-{VERSION}"
-
-from kubiya.loader import get_single_action_store
 
 
 def execute_handler(request: model.RequestModel, action_store: ActionStore) -> Any:
@@ -44,18 +41,3 @@ def execute_handler(request: model.RequestModel, action_store: ActionStore) -> A
             "error": str(e),
             "stacktrace": traceback.format_exc(),
         }
-
-
-async def handle(req: model.RequestModel) -> dict:
-    """Handle a request to the function.
-
-    Args:
-        req (dict): The request parameters.
-
-    Returns:
-        A dictionary containing the results for the request.
-    """
-    res = await run_in_threadpool(execute_handler, request=req, action_store=get_single_action_store())
-    return res
-    execute_handler(request=req, action_store=get_single_action_store())
-    return {"req": req}
