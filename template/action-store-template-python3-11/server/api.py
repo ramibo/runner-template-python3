@@ -10,7 +10,7 @@ from starlette.responses import HTMLResponse
 
 from kubiya.loader import get_single_action_store
 
-from .. import handler
+from . import handler
 from .model import RequestModel, ResponseModel
 from .utils.swagger import get_swagger_ui_html
 
@@ -94,16 +94,3 @@ async def handle_request(
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="An API Error occurred")
     return res
-
-
-def run() -> None:  # pragma: no cover
-    """Run the server."""
-    import uvicorn
-
-    uvicorn.run(
-        "handler.server.api:app", host="127.0.0.1", port=8000, reload=True
-    )
-
-
-if __name__ == "__main__":
-    run()

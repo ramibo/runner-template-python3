@@ -14,27 +14,30 @@ USER user
 
 ENV PATH=$PATH:/home/user/.local/bin
 
-WORKDIR /home/user/app
+# WORKDIR /home/user/app
+
+WORKDIR /home/app/
 
 RUN pip install --no-cache poetry
 RUN poetry config --no-cache
 
-COPY function/pyproject.toml .
-COPY function/poetry.lock .
-COPY function/handler handler
+COPY server server
+COPY index.py .
+COPY pyproject.toml .
+COPY poetry.lock .
 
+COPY function function
 
 RUN poetry install --no-root --without dev
 
-RUN poetry build --format=wheel
 RUN poetry export --only main -f requirements.txt --without-hashes --output requirements.txt
 
-RUN pip install --no-cache -r requirements.txt dist/*.whl -r handler/action_store/requirements.txt --user
+RUN pip install --no-cache -r requirements.txt -r function/requirements.txt --user
 
 ARG FUNCNAME=''
 ENV FUNCNAME=$FUNCNAME
 
-ENV fprocess="python -m handler.server.api"
+ENV fprocess="python index.py"
 ENV cgi_headers="true"
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:8000"
