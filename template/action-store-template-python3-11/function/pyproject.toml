@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "handler"
+version = "2022.12.8"
+description = "Python template for OpenFAAS functions using FastAPI"
+authors = ["Eric Lopes <nullhack@users.noreply.github.com>"]
+maintainers = ["Eric Lopes <nullhack@users.noreply.github.com>"]
+license = "MIT"
+repository = "https://github.com/nullhack/openfaas-fastapi-template"
+documentation = "https://github.com/nullhack/openfaas-fastapi-template/tree/main/docs/api/"
+packages = [
+    { include = "handler" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.79.1"
+pydantic = "1.10.2"
+uvicorn = "^0.18.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
