@@ -12,6 +12,10 @@ RUN addgroup --system user && adduser --system user --ingroup user
 
 USER user
 
+RUN apt-get -qy update \
+    && apt-get -qy install gcc make ${ADDITIONAL_PACKAGE} \
+    && rm -rf /var/lib/apt/lists/*
+
 ENV PATH=$PATH:/home/user/.local/bin
 
 # WORKDIR /home/user/app
