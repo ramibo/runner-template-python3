@@ -11,6 +11,7 @@ class RequestModel(BaseModel):
     input:  Optional[Any] = {}
     secrets: Optional[Dict] = {}
     runner: Optional[str]
+    query_params: Optional[Dict] = None
 
 
 class ResponseModel(BaseModel):

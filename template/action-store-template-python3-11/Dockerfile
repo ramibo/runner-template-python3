@@ -24,8 +24,6 @@ WORKDIR /home/app/
 RUN pip install --no-cache poetry
 RUN poetry config --no-cache
 
-COPY server server
-COPY index.py .
 COPY pyproject.toml .
 COPY poetry.lock .
 
@@ -36,6 +34,9 @@ RUN poetry install --no-root --without dev
 RUN poetry export --only main -f requirements.txt --without-hashes --output requirements.txt
 
 RUN pip install --no-cache -r requirements.txt -r function/requirements.txt --user
+
+COPY server server
+COPY index.py .
 
 ARG FUNCNAME=''
 ENV FUNCNAME=$FUNCNAME
