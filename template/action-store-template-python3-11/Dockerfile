@@ -8,13 +8,12 @@ COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 
 RUN chmod +x /usr/bin/fwatchdog
 
+ARG ADDITIONAL_PACKAGE
+RUN /bin/sh -c set -eux; apt-get update; apt-get install -y --no-install-recommends gcc make build-essential ${ADDITIONAL_PACKAGE}; rm -rf /var/lib/apt/lists/*
+
 RUN addgroup --system user && adduser --system user --ingroup user
 
 USER user
-
-RUN apt-get -qy update \
-    && apt-get -qy install gcc make ${ADDITIONAL_PACKAGE} \
-    && rm -rf /var/lib/apt/lists/*
 
 ENV PATH=$PATH:/home/user/.local/bin
 
@@ -25,8 +24,6 @@ WORKDIR /home/app/
 RUN pip install --no-cache poetry
 RUN poetry config --no-cache
 
-COPY server server
-COPY index.py .
 COPY pyproject.toml .
 COPY poetry.lock .
 
@@ -37,6 +34,9 @@ RUN poetry install --no-root --without dev
 RUN poetry export --only main -f requirements.txt --without-hashes --output requirements.txt
 
 RUN pip install --no-cache -r requirements.txt -r function/requirements.txt --user
+
+COPY server server
+COPY index.py .
 
 ARG FUNCNAME=''
 ENV FUNCNAME=$FUNCNAME

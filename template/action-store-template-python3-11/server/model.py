@@ -7,12 +7,11 @@ from pydantic import BaseModel
 class RequestModel(BaseModel):
     """Define a request model."""
 
-    action: Optional[str]
-    input:  Optional[Any]
-    secrets: Optional[Dict]
-    action_store: Optional[str]
-    inbox_id: Optional[str]
+    action: str
+    input:  Optional[Any] = {}
+    secrets: Optional[Dict] = {}
     runner: Optional[str]
+    query_params: Optional[Dict] = None
 
 
 class ResponseModel(BaseModel):
