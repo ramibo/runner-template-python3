@@ -12,8 +12,17 @@ from . import model
 
 
 VERSION = "1.0.0"
-RUNTIME = f"python3-k-runner-{VERSION}"
+RUNTIME = f"python3.11-runner-{VERSION}"
 
+class SecretNotFoundError(Exception):
+    pass
+
+class SecretsDict(dict):
+    def __getitem__(self,key):
+        try:
+            return super(SecretsDict, self ).__getitem__( key )
+        except KeyError as e:
+            raise SecretNotFoundError(f"Secret '{key}' not found")
 
 def execute_handler(request: model.RequestModel, action_store: ActionStore) -> Any:
     try:
@@ -33,7 +42,9 @@ def execute_handler(request: model.RequestModel, action_store: ActionStore) -> A
             }
 
         if request.secrets:
-            setattr(action_store, "secrets", request.secrets)
+            setattr(action_store, "secrets", SecretsDict(**request.secrets))
+        else:
+            setattr(action_store, "secrets", SecretsDict())
         result = action_store.execute_action(request.action, request.input)
         return {"result": result, "faas_runtime": RUNTIME}
     except Exception as e:

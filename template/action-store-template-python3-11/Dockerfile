@@ -8,13 +8,12 @@ COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 
 RUN chmod +x /usr/bin/fwatchdog
 
+ARG ADDITIONAL_PACKAGE
+RUN /bin/sh -c set -eux; apt-get update; apt-get install -y --no-install-recommends gcc make build-essential ${ADDITIONAL_PACKAGE}; rm -rf /var/lib/apt/lists/*
+
 RUN addgroup --system user && adduser --system user --ingroup user
 
 USER user
-
-RUN apt-get -qy update \
-    && apt-get -qy install gcc make ${ADDITIONAL_PACKAGE} \
-    && rm -rf /var/lib/apt/lists/*
 
 ENV PATH=$PATH:/home/user/.local/bin
 

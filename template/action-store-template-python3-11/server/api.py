@@ -47,25 +47,16 @@ async def swagger_ui_html() -> HTMLResponse:
     return openapi_html
 
 
-@app.get("/", tags=["Request"], description="Read root.")
-@app.post("/", tags=["Request"], description="Read root.")
-async def read_root(request: Request) -> dict:
-    """Defines actions to be taken when a get request is made to the root page.
-
-    Arguments:
-        request (Request): User request object.
-
-    Returns:
-        Dictionary containing the request parameters.
-    """
-    return {"params": request.query_params}
-
-
+@app.post("/",
+    status_code=status.HTTP_200_OK,
+    description="Handle the request.",
+    response_model=dict,
+    tags=["Request"])
 @app.post(
     "/handle",
     status_code=status.HTTP_200_OK,
     description="Handle the request.",
-    response_model=ResponseModel,
+    response_model=dict,
     tags=["Request"],
 )
 async def handle_request(
@@ -87,10 +78,9 @@ async def handle_request(
     """
     try:
         return_data = await run_in_threadpool(handler.execute_handler, request=req_model, action_store=get_single_action_store())
-        res = ResponseModel(data=return_data)
     except Exception:  # pragma: no cover
         # This line is to ensure that any unexpected error will be captured
         # Testing this behavior would introduce hacks in handle, which is not good
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="An API Error occurred")
-    return res
+    return return_data
