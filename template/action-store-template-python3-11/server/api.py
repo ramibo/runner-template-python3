@@ -77,10 +77,14 @@ async def handle_request(
         HTTPException: When the handler raises any Exception.
     """
     try:
-        return_data = await run_in_threadpool(handler.execute_handler, request=req_model, action_store=get_single_action_store())
+        output = await run_in_threadpool(handler.execute_handler, request=req_model, action_store=get_single_action_store())
+        return {
+            "inbox_id": request.get("inbox_id"),
+            "runner": request.get("runner"),
+            "output": output,
+        }
     except Exception:  # pragma: no cover
         # This line is to ensure that any unexpected error will be captured
         # Testing this behavior would introduce hacks in handle, which is not good
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="An API Error occurred")
-    return return_data
