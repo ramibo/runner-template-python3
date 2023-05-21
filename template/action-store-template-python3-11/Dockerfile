@@ -29,7 +29,7 @@ COPY poetry.lock .
 
 COPY function function
 
-RUN poetry install --no-root --without dev
+RUN poetry install --no-root #--without dev
 
 RUN poetry export --only main -f requirements.txt --without-hashes --output requirements.txt
 
