@@ -18,5 +18,5 @@ def SignalHandler(SignalNumber, Frame):
     sys.stderr.flush()
 
 if __name__ == "__main__":
-    run()
     signal.signal(signal.SIGTERM, SignalHandler)
+    run()
