@@ -12,7 +12,7 @@ def run() -> None:  # pragma: no cover
         "server.api:app", host="127.0.0.1", port=8000, reload=False
     )
     
- def SignalHandler(SignalNumber, Frame):
+def SignalHandler(SignalNumber, Frame):
     timeout = os.getenv("write_timeout")
     sys.stderr.write('Function got SIGTERM, draining for up to: {}\n'.format(timeout))
     sys.stderr.flush()
