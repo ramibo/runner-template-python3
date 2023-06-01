@@ -47,11 +47,7 @@ async def swagger_ui_html() -> HTMLResponse:
     return openapi_html
 
 
-@app.post("/",
-    status_code=status.HTTP_200_OK,
-    description="Handle the request.",
-    response_model=dict,
-    tags=["Request"])
+@app.post("/", status_code=status.HTTP_200_OK, description="Handle the request.", response_model=dict, tags=["Request"])
 @app.post(
     "/handle",
     status_code=status.HTTP_200_OK,
@@ -88,3 +84,9 @@ async def handle_request(
         # Testing this behavior would introduce hacks in handle, which is not good
         traceback.print_exc()
         raise HTTPException(status_code=500, detail="An API Error occurred")
+
+
+@app.on_event("shutdown")
+def shutdown() -> None:
+    """Shutdown the server."""
+    exit(0)
